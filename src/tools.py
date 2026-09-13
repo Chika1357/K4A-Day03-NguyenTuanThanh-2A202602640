@@ -11,41 +11,54 @@ from typing import Dict, Any
 # ==============================================================================
 
 TOOLS_SCHEMA = [
-    # Tool 1: Đã được định nghĩa mẫu sẵn cho Học viên tham khảo
+    # Tool 1: Tra cứu dữ liệu sản phẩm
     {
-        "name": "academic_query",
-        "description": "Tra cứu hồ sơ và thông tin học vụ của sinh viên VinUni bằng mã sinh viên.",
+        "name": "search_products",
+        "description": "Tìm sản phẩm trong danh mục theo từ khóa, loại sản phẩm hoặc mức giá tối đa.",
         "parameters": {
             "type": "object",
             "properties": {
-                "student_id": {
+                "query": {
                     "type": "string",
-                    "description": "Mã sinh viên cần tra cứu (ví dụ: 'SV2026001')"
+                    "description": "Tên hoặc từ khóa sản phẩm cần tìm; để chuỗi rỗng nếu chỉ lọc theo loại hoặc ngân sách."
+                },
+                "category": {
+                    "type": "string",
+                    "enum": ["phone", "laptop"],
+                    "description": "Loại sản phẩm cần lọc."
+                },
+                "max_price_vnd": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "description": "Mức giá tối đa tính bằng VND."
                 }
             },
-            "required": ["student_id"]
+            "required": ["query"]
         }
     },
-    
-    # --------------------------------------------------------------------------
-    # TODO 1.2: HỌC VIÊN HOÀN THIỆN TOOL SCHEMA CHO 'schedule_appointment'
-    # 🎯 YÊU CẦU THIẾT KẾ SCHEMA (JSON SCHEMA STANDARD):
-    # 1. Tool dùng để đặt lịch hẹn tư vấn học vụ với Cố vấn học tập VinUni.
-    # 2. Thiết kế các tham số (properties) để LLM trích xuất:
-    #    - student_id (string): Mã sinh viên cần đặt lịch (ví dụ: 'SV2026001')
-    #    - datetime_str (string): Thời gian hẹn (ví dụ: '14:00 15/09/2026')
-    #    - advisor_name (string): Tên cố vấn học tập
-    # 3. Khai báo danh sách các trường bắt buộc (required).
-    # --------------------------------------------------------------------------
+
+    # Tool 2: Tạo artifact báo cáo so sánh từ các sản phẩm đã tra cứu
     {
-        "name": "schedule_appointment",
-        "description": "Đặt lịch hẹn tư vấn học vụ với Cố vấn học tập VinUni.",
+        "name": "create_comparison_report",
+        "description": "Tạo và lưu một báo cáo so sánh từ ít nhất hai mã sản phẩm có trong danh mục.",
         "parameters": {
             "type": "object",
             "properties": {
-                # TODO 1.2: Khai báo các thuộc tính tham số cho Tool tại đây...
+                "product_ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "minItems": 2,
+                    "maxItems": 4,
+                    "description": "Danh sách từ hai đến bốn mã sản phẩm cần so sánh."
+                },
+                "title": {
+                    "type": "string",
+                    "description": "Tiêu đề ngắn cho báo cáo so sánh."
+                }
             },
-            "required": [] # TODO 1.2: Khai báo danh sách các trường bắt buộc tại đây...
+            "required": ["product_ids", "title"]
         }
     }
 ]
