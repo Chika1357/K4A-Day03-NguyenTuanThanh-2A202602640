@@ -29,6 +29,14 @@ class ProductToolsTest(unittest.TestCase):
         self.assertTrue(all(item["category"] == "laptop" for item in result["products"]))
         self.assertTrue(all(item["price_vnd"] <= 25_000_000 for item in result["products"]))
 
+    def test_search_allows_filters_without_query(self):
+        result = self.call_tool(
+            "search_products",
+            {"category": "phone", "max_price_vnd": 20_000_000},
+        )
+        self.assertEqual(result["status"], "SUCCESS")
+        self.assertTrue(all(item["category"] == "phone" for item in result["products"]))
+
     def test_search_returns_not_found_for_unmatched_query(self):
         result = self.call_tool("search_products", {"query": "không tồn tại"})
         self.assertEqual(result["status"], "NOT_FOUND")

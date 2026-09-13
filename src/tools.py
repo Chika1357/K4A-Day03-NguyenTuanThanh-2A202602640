@@ -21,7 +21,7 @@ TOOLS_SCHEMA = [
             "properties": {
                 "query": {
                     "type": "string",
-                    "description": "Tên hoặc từ khóa sản phẩm cần tìm; để chuỗi rỗng nếu chỉ lọc theo loại hoặc ngân sách."
+                    "description": "Tên hoặc từ khóa sản phẩm cần tìm. Có thể bỏ qua nếu chỉ lọc theo loại hoặc ngân sách."
                 },
                 "category": {
                     "type": "string",
@@ -34,7 +34,7 @@ TOOLS_SCHEMA = [
                     "description": "Mức giá tối đa tính bằng VND."
                 }
             },
-            "required": ["query"]
+            "required": []
         }
     },
 
@@ -153,7 +153,7 @@ def _json_response(payload: Dict[str, Any]) -> str:
 
 
 def execute_search_products(
-    query: str,
+    query: str = "",
     category: str | None = None,
     max_price_vnd: int | None = None
 ) -> str:
