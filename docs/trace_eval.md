@@ -22,20 +22,64 @@
 
 ## 2. TRÍCH XUẤT KẾT QUẢ WATERFALL TRACE LOG (SAU KHI CHẠY TEST SUITE TRÊN API THẬT)
 
-> ⚠️ **YÊU CẦU NGHIỆM THU:** Mở tệp `.env`, đặt `LLM_PROVIDER=openai` và điền `OPENAI_API_KEY` để kết nối LLM thật trước khi thực thi `python src/app.py --all`. Bài nộp chỉ dùng Mock Offline Provider sẽ không đạt điểm nghiệm thực tế.
+Lần nghiệm thu chính thức được chạy bằng `OpenAIProvider`, model `gpt-4o-mini`, bắt đầu lúc `2026-09-13T09:04:40.685466+00:00`. Dưới đây là phần rút gọn của trace `TC04`; dữ liệu đầy đủ nằm trong `docs/trace_waterfall.json`:
 
-Dán 1 đoạn trích xuất log tiêu biểu từ file `docs/trace_waterfall.json` sinh ra từ phản hồi LLM API thật:
+```json
+[
+  {
+    "test_case_id": "TC04",
+    "step": 1,
+    "action_type": "TOOL_EXECUTION",
+    "tool_name": "search_products",
+    "arguments": {
+      "category": "laptop",
+      "max_price_vnd": 25000000
+    },
+    "observation": {
+      "status": "SUCCESS",
+      "count": 3,
+      "product_ids": ["LP002", "LP001", "LP003"]
+    },
+    "llm_latency_ms": 1098.51,
+    "tool_latency_ms": 0.15
+  },
+  {
+    "test_case_id": "TC04",
+    "step": 2,
+    "action_type": "TOOL_EXECUTION",
+    "tool_name": "create_comparison_report",
+    "arguments": {
+      "product_ids": ["LP002", "LP001"],
+      "title": "Laptop trong ngân sách 25 triệu"
+    },
+    "observation": {
+      "status": "SUCCESS",
+      "report_id": "CMP-775E1C16"
+    },
+    "llm_latency_ms": 1256.11,
+    "tool_latency_ms": 0.11
+  },
+  {
+    "test_case_id": "TC04",
+    "step": 3,
+    "action_type": "FINAL_ANSWER",
+    "llm_latency_ms": 2217.49
+  }
+]
+```
 
-> Chưa điền: đoạn trace tại đây phải được lấy từ lần chạy OpenAI API thật, không dùng dữ liệu mẫu hoặc Mock để thay thế.
+Trace cho thấy tham số `product_ids` của bước 2 được lấy động từ Observation ở bước 1, không được ghi cứng trong prompt người dùng. Với `TC05`, Agent vẫn gọi `create_comparison_report`, nhận `INVALID_PRODUCT` cho `LP999` rồi giải thích lỗi thay vì giả lập báo cáo thành công.
 
 ---
 
 ## 3. TỔNG KẾT KẾT QUẢ NGHIỆM THU & NỘP BÀI
 
-- **Preflight offline:** 5 / 5 test cases PASS bằng `MockOfflineProvider`; 5 lượt gọi tool đúng theo acceptance criteria. Kết quả này chỉ xác nhận logic nội bộ, không thay thế lần nghiệm thu bằng API thật.
-- [ ] Đã điền API Key thật trong `.env` và xác nhận Agent chạy mượt mà trên OpenAI API thật.
-- **Tổng số Test Cases đã chạy thành công:** ___ / 5 test cases.
-- **Số lượt gọi Tool qua MCP Server chính xác:** ___ lượt.
+- **Preflight offline:** 5 / 5 test cases PASS bằng `MockOfflineProvider`; kết quả này được dùng để kiểm tra logic trước khi gọi API thật.
+- [x] Đã cấu hình API Key trong `.env` cục bộ và xác nhận Agent chạy bằng `OpenAIProvider`; API key không được commit vào Git.
+- **Kết quả nghiệm thu API thật:** 5 / 5 test cases PASS bằng model `gpt-4o-mini`.
+- **Số lượt gọi Tool qua MCP Server chính xác:** 5 lượt, gồm 4 Observation `SUCCESS` và 1 `INVALID_PRODUCT` mong đợi ở `TC05`.
+- **Waterfall trace:** 10 events; tổng LLM latency `18,859.20 ms`, tổng Tool latency `0.46 ms`.
+- **Kiểm thử tự động:** 11 / 11 unit và API contract tests PASS trên Python 3.11.11.
 - **Kết quả đẩy Repo nộp bài:** [ ] Đã Commit và Push mã nguồn thành công lên GitHub cá nhân.
 
 ---

@@ -1,28 +1,27 @@
 [
   {
     "test_case_id": "TC01",
-    "provider": "MockOfflineProvider",
-    "model": "offline-mock-product-agent",
-    "run_started_at_utc": "2026-09-13T03:36:53.561673+00:00",
+    "provider": "OpenAIProvider",
+    "model": "gpt-4o-mini",
+    "run_started_at_utc": "2026-09-13T09:04:40.685466+00:00",
     "step": 1,
     "query": "Bạn có thể giúp tôi những gì khi cần tìm và so sánh sản phẩm?",
     "action_type": "FINAL_ANSWER",
-    "thought": "Đây là câu hỏi chung về phạm vi hỗ trợ nên không cần gọi công cụ.",
-    "output": "Tôi có thể tìm điện thoại hoặc laptop trong catalog mô phỏng theo từ khóa, loại và ngân sách, rồi tạo báo cáo so sánh từ 2-4 mã sản phẩm hợp lệ.",
-    "llm_latency_ms": 0.06
+    "thought": "OpenAI chọn trả lời trực tiếp.",
+    "output": "Tôi có thể giúp bạn tìm kiếm sản phẩm theo từ khóa, loại sản phẩm hoặc ngân sách. Sau khi tìm được sản phẩm, tôi cũng có thể tạo báo cáo so sánh giữa 2-4 sản phẩm mà bạn chọn. Bạn chỉ cần cung cấp thông tin cần thiết và tôi sẽ thực hiện các bước cần thiết để hỗ trợ bạn.",
+    "llm_latency_ms": 4089.16
   },
   {
     "test_case_id": "TC02",
-    "provider": "MockOfflineProvider",
-    "model": "offline-mock-product-agent",
-    "run_started_at_utc": "2026-09-13T03:36:53.561673+00:00",
+    "provider": "OpenAIProvider",
+    "model": "gpt-4o-mini",
+    "run_started_at_utc": "2026-09-13T09:04:40.685466+00:00",
     "step": 1,
     "query": "Tìm giúp tôi các laptop có giá không quá 25 triệu đồng.",
     "action_type": "TOOL_EXECUTION",
-    "thought": "Cần tra catalog để lọc laptop theo ngân sách 25 triệu đồng.",
+    "thought": "OpenAI chọn công cụ search_products.",
     "tool_name": "search_products",
     "arguments": {
-      "query": "",
       "category": "laptop",
       "max_price_vnd": 25000000
     },
@@ -72,30 +71,30 @@
         }
       ]
     },
-    "llm_latency_ms": 0.0,
-    "tool_latency_ms": 0.04
+    "llm_latency_ms": 1477.16,
+    "tool_latency_ms": 0.1
   },
   {
     "test_case_id": "TC02",
-    "provider": "MockOfflineProvider",
-    "model": "offline-mock-product-agent",
-    "run_started_at_utc": "2026-09-13T03:36:53.561673+00:00",
+    "provider": "OpenAIProvider",
+    "model": "gpt-4o-mini",
+    "run_started_at_utc": "2026-09-13T09:04:40.685466+00:00",
     "step": 2,
     "query": "Tìm giúp tôi các laptop có giá không quá 25 triệu đồng.",
     "action_type": "FINAL_ANSWER",
-    "thought": "Đã có kết quả tìm kiếm và yêu cầu không cần thêm hành động.",
-    "output": "Đã tìm thấy các sản phẩm phù hợp trong catalog mô phỏng. Giá và thông số không phải dữ liệu bán hàng thời gian thực.",
-    "llm_latency_ms": 0.1
+    "thought": "OpenAI chọn trả lời trực tiếp.",
+    "output": "Tôi đã tìm thấy 3 laptop có giá không quá 25 triệu đồng như sau:\n\n1. **ASUS Vivobook 15**\n   - Giá: 19,490,000 VND\n   - CPU: AMD Ryzen 7\n   - RAM: 16 GB\n   - Lưu trữ: 512 GB\n   - Màn hình: 15.6 inch\n\n2. **Lenovo ThinkPad E14 Gen 5**\n   - Giá: 22,900,000 VND\n   - CPU: Intel Core i5\n   - RAM: 16 GB\n   - Lưu trữ: 512 GB\n   - Màn hình: 14 inch\n\n3. **MacBook Air M2**\n   - Giá: 24,990,000 VND\n   - CPU: Apple M2\n   - RAM: 8 GB\n   - Lưu trữ: 256 GB\n   - Màn hình: 13.6 inch\n\nNếu bạn cần thêm thông tin hoặc so sánh giữa các sản phẩm này, hãy cho tôi biết!",
+    "llm_latency_ms": 2441.53
   },
   {
     "test_case_id": "TC03",
-    "provider": "MockOfflineProvider",
-    "model": "offline-mock-product-agent",
-    "run_started_at_utc": "2026-09-13T03:36:53.561673+00:00",
+    "provider": "OpenAIProvider",
+    "model": "gpt-4o-mini",
+    "run_started_at_utc": "2026-09-13T09:04:40.685466+00:00",
     "step": 1,
     "query": "Tạo báo cáo so sánh có tiêu đề 'Laptop cho AI researcher' cho hai sản phẩm LP001 và LP002.",
     "action_type": "TOOL_EXECUTION",
-    "thought": "Yêu cầu đã cung cấp đủ hai mã sản phẩm để tạo báo cáo.",
+    "thought": "OpenAI chọn công cụ create_comparison_report.",
     "tool_name": "create_comparison_report",
     "arguments": {
       "product_ids": [
@@ -147,33 +146,32 @@
         "data_note": "Báo cáo dùng dữ liệu mô phỏng và không phải khuyến nghị mua hàng."
       }
     },
-    "llm_latency_ms": 0.07,
-    "tool_latency_ms": 0.05
+    "llm_latency_ms": 1231.83,
+    "tool_latency_ms": 0.06
   },
   {
     "test_case_id": "TC03",
-    "provider": "MockOfflineProvider",
-    "model": "offline-mock-product-agent",
-    "run_started_at_utc": "2026-09-13T03:36:53.561673+00:00",
+    "provider": "OpenAIProvider",
+    "model": "gpt-4o-mini",
+    "run_started_at_utc": "2026-09-13T09:04:40.685466+00:00",
     "step": 2,
     "query": "Tạo báo cáo so sánh có tiêu đề 'Laptop cho AI researcher' cho hai sản phẩm LP001 và LP002.",
     "action_type": "FINAL_ANSWER",
-    "thought": "Báo cáo đã được tạo thành công; có thể trả lời và kết thúc.",
-    "output": "Đã tạo báo cáo so sánh CMP-F4D392B0 từ dữ liệu catalog mô phỏng. Kết quả không phải giá bán thời gian thực hay khuyến nghị mua hàng.",
-    "llm_latency_ms": 0.14
+    "thought": "OpenAI chọn trả lời trực tiếp.",
+    "output": "Báo cáo so sánh với tiêu đề 'Laptop cho AI researcher' đã được tạo thành công với mã CMP-F4D392B0. Dưới đây là thông tin chi tiết:\n\n### Sản phẩm so sánh:\n1. **Lenovo ThinkPad E14 Gen 5**\n   - Mã sản phẩm: LP001\n   - Thương hiệu: Lenovo\n   - Giá: 22,900,000 VND\n   - CPU: Intel Core i5\n   - RAM: 16 GB\n   - Lưu trữ: 512 GB\n   - Màn hình: 14 inch\n\n2. **ASUS Vivobook 15**\n   - Mã sản phẩm: LP002\n   - Thương hiệu: ASUS\n   - Giá: 19,490,000 VND\n   - CPU: AMD Ryzen 7\n   - RAM: 16 GB\n   - Lưu trữ: 512 GB\n   - Màn hình: 15.6 inch\n\n### Tóm tắt:\n- Sản phẩm có giá thấp nhất: ASUS Vivobook 15 (LP002) với giá 19,490,000 VND.\n- Chênh lệch giá giữa hai sản phẩm: 3,410,000 VND.\n\n**Lưu ý:** Báo cáo sử dụng dữ liệu mô phỏng và không phải là khuyến nghị mua hàng.",
+    "llm_latency_ms": 2755.37
   },
   {
     "test_case_id": "TC04",
-    "provider": "MockOfflineProvider",
-    "model": "offline-mock-product-agent",
-    "run_started_at_utc": "2026-09-13T03:36:53.561673+00:00",
+    "provider": "OpenAIProvider",
+    "model": "gpt-4o-mini",
+    "run_started_at_utc": "2026-09-13T09:04:40.685466+00:00",
     "step": 1,
     "query": "Tìm hai laptop có giá không quá 25 triệu đồng rồi tạo báo cáo so sánh với tiêu đề 'Laptop trong ngân sách 25 triệu'.",
     "action_type": "TOOL_EXECUTION",
-    "thought": "Cần tra catalog để lọc laptop theo ngân sách 25 triệu đồng.",
+    "thought": "OpenAI chọn công cụ search_products.",
     "tool_name": "search_products",
     "arguments": {
-      "query": "",
       "category": "laptop",
       "max_price_vnd": 25000000
     },
@@ -223,18 +221,18 @@
         }
       ]
     },
-    "llm_latency_ms": 0.01,
-    "tool_latency_ms": 0.03
+    "llm_latency_ms": 1098.51,
+    "tool_latency_ms": 0.15
   },
   {
     "test_case_id": "TC04",
-    "provider": "MockOfflineProvider",
-    "model": "offline-mock-product-agent",
-    "run_started_at_utc": "2026-09-13T03:36:53.561673+00:00",
+    "provider": "OpenAIProvider",
+    "model": "gpt-4o-mini",
+    "run_started_at_utc": "2026-09-13T09:04:40.685466+00:00",
     "step": 2,
     "query": "Tìm hai laptop có giá không quá 25 triệu đồng rồi tạo báo cáo so sánh với tiêu đề 'Laptop trong ngân sách 25 triệu'.",
     "action_type": "TOOL_EXECUTION",
-    "thought": "Đã có kết quả tìm kiếm; dùng hai product_id đầu tiên để tạo báo cáo.",
+    "thought": "OpenAI chọn công cụ create_comparison_report.",
     "tool_name": "create_comparison_report",
     "arguments": {
       "product_ids": [
@@ -286,37 +284,37 @@
         "data_note": "Báo cáo dùng dữ liệu mô phỏng và không phải khuyến nghị mua hàng."
       }
     },
-    "llm_latency_ms": 0.09,
-    "tool_latency_ms": 0.03
+    "llm_latency_ms": 1256.11,
+    "tool_latency_ms": 0.11
   },
   {
     "test_case_id": "TC04",
-    "provider": "MockOfflineProvider",
-    "model": "offline-mock-product-agent",
-    "run_started_at_utc": "2026-09-13T03:36:53.561673+00:00",
+    "provider": "OpenAIProvider",
+    "model": "gpt-4o-mini",
+    "run_started_at_utc": "2026-09-13T09:04:40.685466+00:00",
     "step": 3,
     "query": "Tìm hai laptop có giá không quá 25 triệu đồng rồi tạo báo cáo so sánh với tiêu đề 'Laptop trong ngân sách 25 triệu'.",
     "action_type": "FINAL_ANSWER",
-    "thought": "Báo cáo đã được tạo thành công; có thể trả lời và kết thúc.",
-    "output": "Đã tạo báo cáo so sánh CMP-775E1C16 từ dữ liệu catalog mô phỏng. Kết quả không phải giá bán thời gian thực hay khuyến nghị mua hàng.",
-    "llm_latency_ms": 0.18
+    "thought": "OpenAI chọn trả lời trực tiếp.",
+    "output": "Đã tìm thấy hai laptop trong ngân sách 25 triệu đồng và tạo báo cáo so sánh với tiêu đề \"Laptop trong ngân sách 25 triệu\". \n\nCác sản phẩm được so sánh là:\n1. **ASUS Vivobook 15**\n   - Giá: 19,490,000 VND\n   - CPU: AMD Ryzen 7\n   - RAM: 16 GB\n   - Lưu trữ: 512 GB\n   - Màn hình: 15.6 inch\n\n2. **Lenovo ThinkPad E14 Gen 5**\n   - Giá: 22,900,000 VND\n   - CPU: Intel Core i5\n   - RAM: 16 GB\n   - Lưu trữ: 512 GB\n   - Màn hình: 14 inch\n\nBáo cáo đã được tạo thành công với mã báo cáo là CMP-775E1C16. \n\nDữ liệu là mô phỏng và không phải khuyến nghị mua hàng.",
+    "llm_latency_ms": 2217.49
   },
   {
     "test_case_id": "TC05",
-    "provider": "MockOfflineProvider",
-    "model": "offline-mock-product-agent",
-    "run_started_at_utc": "2026-09-13T03:36:53.561673+00:00",
+    "provider": "OpenAIProvider",
+    "model": "gpt-4o-mini",
+    "run_started_at_utc": "2026-09-13T09:04:40.685466+00:00",
     "step": 1,
     "query": "Tạo báo cáo so sánh giữa LP001 và mã sản phẩm không tồn tại LP999.",
     "action_type": "TOOL_EXECUTION",
-    "thought": "Yêu cầu đã cung cấp đủ hai mã sản phẩm để tạo báo cáo.",
+    "thought": "OpenAI chọn công cụ create_comparison_report.",
     "tool_name": "create_comparison_report",
     "arguments": {
       "product_ids": [
         "LP001",
         "LP999"
       ],
-      "title": "Báo cáo so sánh sản phẩm"
+      "title": "Báo cáo so sánh giữa LP001 và LP999"
     },
     "observation": {
       "status": "INVALID_PRODUCT",
@@ -325,19 +323,19 @@
       ],
       "message": "Không tồn tại sản phẩm: LP999."
     },
-    "llm_latency_ms": 0.01,
-    "tool_latency_ms": 0.01
+    "llm_latency_ms": 1190.55,
+    "tool_latency_ms": 0.04
   },
   {
     "test_case_id": "TC05",
-    "provider": "MockOfflineProvider",
-    "model": "offline-mock-product-agent",
-    "run_started_at_utc": "2026-09-13T03:36:53.561673+00:00",
+    "provider": "OpenAIProvider",
+    "model": "gpt-4o-mini",
+    "run_started_at_utc": "2026-09-13T09:04:40.685466+00:00",
     "step": 2,
     "query": "Tạo báo cáo so sánh giữa LP001 và mã sản phẩm không tồn tại LP999.",
     "action_type": "FINAL_ANSWER",
-    "thought": "Tool đã xác nhận mã sản phẩm không hợp lệ; cần dừng và báo đúng lỗi.",
-    "output": "Không thể tạo báo cáo vì LP999 không tồn tại trong catalog mô phỏng. Tôi không tự tạo dữ liệu thay thế.",
-    "llm_latency_ms": 0.03
+    "thought": "OpenAI chọn trả lời trực tiếp.",
+    "output": "Mã sản phẩm LP999 không tồn tại, vì vậy không thể tạo báo cáo so sánh với mã này. Bạn có thể cung cấp mã sản phẩm khác để tôi hỗ trợ tạo báo cáo so sánh.",
+    "llm_latency_ms": 1101.49
   }
 ]
