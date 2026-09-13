@@ -41,6 +41,16 @@ cp config/test_cases.example.json config/test_cases.json
 python src/app.py --all
 ```
 
+### Chạy giao diện Web Demo
+
+Sau khi điền provider, model và API key trong `.env`, khởi động ứng dụng tại thư mục gốc:
+
+```bash
+python -m uvicorn web_api:app --app-dir src --host 127.0.0.1 --port 8000
+```
+
+Mở `http://127.0.0.1:8000` để dùng giao diện CompareAI. Web UI gồm vùng hội thoại, kết quả sản phẩm, báo cáo so sánh, inspector thông số và ReAct trace console. API key chỉ được đọc từ `.env` phía backend và không được trả về trình duyệt.
+
 **Kỳ vọng Output màn hình:**
 ```text
 ✅ [MOCK OFFLINE MODE PASS]: Môi trường đã sẵn sàng! 
