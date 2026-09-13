@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="CompareAI - trợ lý ReAct tìm và so sánh sản phẩm">
+    <title>CompareAI</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
+    <script src="/static/app.js" defer></script>
+  </head>
+  <body>
+    <div class="grid-layer" aria-hidden="true"></div>
+
+    <header class="app-header">
+      <button class="brand" id="brand-button" type="button" aria-label="Về trang chính">
+        <span class="brand-mark">C</span>
+        <span class="brand-name"><strong>Compare</strong>AI</span>
+      </button>
+
+      <div class="header-actions">
+        <div class="catalog-stat" title="Danh mục dữ liệu mô phỏng">
+          <i data-lucide="database"></i>
+          <span id="catalog-count">catalog: -- items</span>
+        </div>
+        <div class="connection" id="connection-state" aria-live="polite">
+          <span class="status-dot"></span>
+          <span id="provider-label">CONNECTING</span>
+        </div>
+        <button class="icon-button mobile-trace-button" id="trace-toggle" type="button" title="Mở ReAct trace" aria-label="Mở ReAct trace">
+          <i data-lucide="panel-right"></i>
+        </button>
+        <button class="icon-button" id="new-chat" type="button" title="Cuộc trò chuyện mới" aria-label="Cuộc trò chuyện mới">
+          <i data-lucide="square-pen"></i>
+        </button>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <section class="chat-panel" aria-label="Trợ lý so sánh sản phẩm">
+        <div class="home-view" id="home-view">
+          <div class="home-content">
+            <img class="device-visual" src="/static/assets/device-lineup.png" alt="Laptop, điện thoại và tai nghe dùng để so sánh">
+            <div class="eyebrow">PRODUCT INTELLIGENCE // REACT</div>
+            <h1>Compare<span>AI</span></h1>
+            <form class="hero-composer" id="hero-form">
+              <textarea id="hero-input" rows="1" maxlength="1000" placeholder="Bạn muốn tìm hoặc so sánh sản phẩm nào?" aria-label="Nhập yêu cầu so sánh sản phẩm" required></textarea>
+              <button class="send-button" type="submit" title="Gửi yêu cầu" aria-label="Gửi yêu cầu">
+                <i data-lucide="arrow-right"></i>
+              </button>
+            </form>
+            <div class="suggestions" aria-label="Yêu cầu mẫu">
+              <button type="button" data-query="Tìm giúp tôi các laptop có giá không quá 25 triệu đồng.">Laptop dưới 25 triệu</button>
+              <button type="button" data-query="Tạo báo cáo so sánh có tiêu đề 'Laptop cho AI researcher' cho hai sản phẩm LP001 và LP002.">So sánh LP001 / LP002</button>
+              <button type="button" data-query="Tìm các điện thoại có giá không quá 20 triệu đồng.">Điện thoại dưới 20 triệu</button>
+            </div>
+            <div class="data-caption">7 MOCK PRODUCTS · LAPTOPS + PHONES</div>
+          </div>
+        </div>
+
+        <div class="conversation-view is-hidden" id="conversation-view">
+          <div class="messages" id="messages" aria-live="polite"></div>
+          <footer class="composer-dock">
+            <form class="chat-composer" id="chat-form">
+              <textarea id="chat-input" rows="1" maxlength="1000" placeholder="Tiếp tục yêu cầu..." aria-label="Nhập tin nhắn" required></textarea>
+              <button class="send-button" type="submit" title="Gửi yêu cầu" aria-label="Gửi yêu cầu">
+                <i data-lucide="send"></i>
+              </button>
+            </form>
+          </footer>
+        </div>
+      </section>
+
+      <aside class="trace-panel" id="trace-panel" aria-label="ReAct trace">
+        <div class="trace-header">
+          <div class="trace-title"><i data-lucide="terminal"></i><span>REACT_TRACE</span></div>
+          <div class="trace-meta"><span>v1.0</span><span class="trace-online"><b></b>ONLINE</span></div>
+          <button class="icon-button trace-close" id="trace-close" type="button" title="Đóng trace" aria-label="Đóng trace">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+        <div class="trace-model" id="trace-model">Awaiting provider...</div>
+        <div class="trace-log" id="trace-log">
+          <div class="trace-empty" id="trace-empty">
+            <i data-lucide="activity"></i>
+            <span>Awaiting query...</span>
+          </div>
+        </div>
+      </aside>
+
+      <div class="mobile-backdrop" id="mobile-backdrop"></div>
+
+      <aside class="inspector" id="inspector" aria-hidden="true">
+        <div class="inspector-header">
+          <div><i data-lucide="scan-search"></i><span>PRODUCT_INSPECTOR</span></div>
+          <button class="icon-button" id="inspector-close" type="button" title="Đóng chi tiết" aria-label="Đóng chi tiết">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+        <div class="inspector-body" id="inspector-body"></div>
+      </aside>
+    </main>
+
+    <template id="loading-template">
+      <div class="message assistant-message loading-message">
+        <div class="message-meta">AGENT // PROCESSING</div>
+        <div class="loading-lines"><span></span><span></span><span></span></div>
+      </div>
+    </template>
+  </body>
+</html>
