@@ -1,29 +1,343 @@
 [
   {
+    "test_case_id": "TC01",
+    "provider": "MockOfflineProvider",
+    "model": "offline-mock-product-agent",
+    "run_started_at_utc": "2026-09-13T03:36:53.561673+00:00",
     "step": 1,
-    "query": "Chào bạn, bạn có thể giới thiệu quy chế học vụ cơ bản của Đại học VinUni không?",
+    "query": "Bạn có thể giúp tôi những gì khi cần tìm và so sánh sản phẩm?",
     "action_type": "FINAL_ANSWER",
-    "thought": "Câu hỏi chung về quy chế học vụ, trả lời trực tiếp không cần gọi Tool.",
-    "output": "[Mock Agent Response]: Xin chào! Quy chế học vụ VinUni yêu cầu sinh viên tích lũy tối thiểu 120 tín chỉ và duy trì GPA trên 2.0 để tốt nghiệp.",
-    "latency_ms": 2845.93
+    "thought": "Đây là câu hỏi chung về phạm vi hỗ trợ nên không cần gọi công cụ.",
+    "output": "Tôi có thể tìm điện thoại hoặc laptop trong catalog mô phỏng theo từ khóa, loại và ngân sách, rồi tạo báo cáo so sánh từ 2-4 mã sản phẩm hợp lệ.",
+    "llm_latency_ms": 0.06
   },
   {
+    "test_case_id": "TC02",
+    "provider": "MockOfflineProvider",
+    "model": "offline-mock-product-agent",
+    "run_started_at_utc": "2026-09-13T03:36:53.561673+00:00",
     "step": 1,
-    "query": "Hãy tra cứu thông tin học vụ của sinh viên SV2026001.",
+    "query": "Tìm giúp tôi các laptop có giá không quá 25 triệu đồng.",
     "action_type": "TOOL_EXECUTION",
-    "tool_name": "academic_query",
+    "thought": "Cần tra catalog để lọc laptop theo ngân sách 25 triệu đồng.",
+    "tool_name": "search_products",
     "arguments": {
-      "student_id": "SV2026001"
+      "query": "",
+      "category": "laptop",
+      "max_price_vnd": 25000000
     },
-    "observation": {},
-    "latency_ms": 799.12
+    "observation": {
+      "status": "SUCCESS",
+      "data_source": "MOCK_PRODUCT_CATALOG",
+      "data_note": "Giá và thông số chỉ phục vụ bài lab, không phải dữ liệu bán hàng thời gian thực.",
+      "filters": {
+        "query": "",
+        "category": "laptop",
+        "max_price_vnd": 25000000
+      },
+      "count": 3,
+      "products": [
+        {
+          "product_id": "LP002",
+          "name": "ASUS Vivobook 15",
+          "brand": "ASUS",
+          "category": "laptop",
+          "price_vnd": 19490000,
+          "cpu": "AMD Ryzen 7",
+          "ram_gb": 16,
+          "storage_gb": 512,
+          "display": "15.6 inch"
+        },
+        {
+          "product_id": "LP001",
+          "name": "Lenovo ThinkPad E14 Gen 5",
+          "brand": "Lenovo",
+          "category": "laptop",
+          "price_vnd": 22900000,
+          "cpu": "Intel Core i5",
+          "ram_gb": 16,
+          "storage_gb": 512,
+          "display": "14 inch"
+        },
+        {
+          "product_id": "LP003",
+          "name": "MacBook Air M2",
+          "brand": "Apple",
+          "category": "laptop",
+          "price_vnd": 24990000,
+          "cpu": "Apple M2",
+          "ram_gb": 8,
+          "storage_gb": 256,
+          "display": "13.6 inch"
+        }
+      ]
+    },
+    "llm_latency_ms": 0.0,
+    "tool_latency_ms": 0.04
   },
   {
+    "test_case_id": "TC02",
+    "provider": "MockOfflineProvider",
+    "model": "offline-mock-product-agent",
+    "run_started_at_utc": "2026-09-13T03:36:53.561673+00:00",
     "step": 2,
-    "query": "Hãy tra cứu thông tin học vụ của sinh viên SV2026001.",
+    "query": "Tìm giúp tôi các laptop có giá không quá 25 triệu đồng.",
     "action_type": "FINAL_ANSWER",
-    "thought": "Tổng hợp kết quả từ MCP Server thành công.",
-    "output": "Chưa thể trả lời chi tiết do chưa nhận được dữ liệu từ MCP Server (hãy hoàn thành TODO 2.1).",
-    "latency_ms": 10.0
+    "thought": "Đã có kết quả tìm kiếm và yêu cầu không cần thêm hành động.",
+    "output": "Đã tìm thấy các sản phẩm phù hợp trong catalog mô phỏng. Giá và thông số không phải dữ liệu bán hàng thời gian thực.",
+    "llm_latency_ms": 0.1
+  },
+  {
+    "test_case_id": "TC03",
+    "provider": "MockOfflineProvider",
+    "model": "offline-mock-product-agent",
+    "run_started_at_utc": "2026-09-13T03:36:53.561673+00:00",
+    "step": 1,
+    "query": "Tạo báo cáo so sánh có tiêu đề 'Laptop cho AI researcher' cho hai sản phẩm LP001 và LP002.",
+    "action_type": "TOOL_EXECUTION",
+    "thought": "Yêu cầu đã cung cấp đủ hai mã sản phẩm để tạo báo cáo.",
+    "tool_name": "create_comparison_report",
+    "arguments": {
+      "product_ids": [
+        "LP001",
+        "LP002"
+      ],
+      "title": "Laptop cho AI researcher"
+    },
+    "observation": {
+      "status": "SUCCESS",
+      "message": "Đã tạo báo cáo 'Laptop cho AI researcher' với mã CMP-F4D392B0.",
+      "report": {
+        "report_id": "CMP-F4D392B0",
+        "title": "Laptop cho AI researcher",
+        "product_ids": [
+          "LP001",
+          "LP002"
+        ],
+        "products": [
+          {
+            "product_id": "LP001",
+            "name": "Lenovo ThinkPad E14 Gen 5",
+            "brand": "Lenovo",
+            "category": "laptop",
+            "price_vnd": 22900000,
+            "cpu": "Intel Core i5",
+            "ram_gb": 16,
+            "storage_gb": 512,
+            "display": "14 inch"
+          },
+          {
+            "product_id": "LP002",
+            "name": "ASUS Vivobook 15",
+            "brand": "ASUS",
+            "category": "laptop",
+            "price_vnd": 19490000,
+            "cpu": "AMD Ryzen 7",
+            "ram_gb": 16,
+            "storage_gb": 512,
+            "display": "15.6 inch"
+          }
+        ],
+        "summary": {
+          "lowest_price_product_id": "LP002",
+          "lowest_price_vnd": 19490000,
+          "price_range_vnd": 3410000
+        },
+        "data_source": "MOCK_PRODUCT_CATALOG",
+        "data_note": "Báo cáo dùng dữ liệu mô phỏng và không phải khuyến nghị mua hàng."
+      }
+    },
+    "llm_latency_ms": 0.07,
+    "tool_latency_ms": 0.05
+  },
+  {
+    "test_case_id": "TC03",
+    "provider": "MockOfflineProvider",
+    "model": "offline-mock-product-agent",
+    "run_started_at_utc": "2026-09-13T03:36:53.561673+00:00",
+    "step": 2,
+    "query": "Tạo báo cáo so sánh có tiêu đề 'Laptop cho AI researcher' cho hai sản phẩm LP001 và LP002.",
+    "action_type": "FINAL_ANSWER",
+    "thought": "Báo cáo đã được tạo thành công; có thể trả lời và kết thúc.",
+    "output": "Đã tạo báo cáo so sánh CMP-F4D392B0 từ dữ liệu catalog mô phỏng. Kết quả không phải giá bán thời gian thực hay khuyến nghị mua hàng.",
+    "llm_latency_ms": 0.14
+  },
+  {
+    "test_case_id": "TC04",
+    "provider": "MockOfflineProvider",
+    "model": "offline-mock-product-agent",
+    "run_started_at_utc": "2026-09-13T03:36:53.561673+00:00",
+    "step": 1,
+    "query": "Tìm hai laptop có giá không quá 25 triệu đồng rồi tạo báo cáo so sánh với tiêu đề 'Laptop trong ngân sách 25 triệu'.",
+    "action_type": "TOOL_EXECUTION",
+    "thought": "Cần tra catalog để lọc laptop theo ngân sách 25 triệu đồng.",
+    "tool_name": "search_products",
+    "arguments": {
+      "query": "",
+      "category": "laptop",
+      "max_price_vnd": 25000000
+    },
+    "observation": {
+      "status": "SUCCESS",
+      "data_source": "MOCK_PRODUCT_CATALOG",
+      "data_note": "Giá và thông số chỉ phục vụ bài lab, không phải dữ liệu bán hàng thời gian thực.",
+      "filters": {
+        "query": "",
+        "category": "laptop",
+        "max_price_vnd": 25000000
+      },
+      "count": 3,
+      "products": [
+        {
+          "product_id": "LP002",
+          "name": "ASUS Vivobook 15",
+          "brand": "ASUS",
+          "category": "laptop",
+          "price_vnd": 19490000,
+          "cpu": "AMD Ryzen 7",
+          "ram_gb": 16,
+          "storage_gb": 512,
+          "display": "15.6 inch"
+        },
+        {
+          "product_id": "LP001",
+          "name": "Lenovo ThinkPad E14 Gen 5",
+          "brand": "Lenovo",
+          "category": "laptop",
+          "price_vnd": 22900000,
+          "cpu": "Intel Core i5",
+          "ram_gb": 16,
+          "storage_gb": 512,
+          "display": "14 inch"
+        },
+        {
+          "product_id": "LP003",
+          "name": "MacBook Air M2",
+          "brand": "Apple",
+          "category": "laptop",
+          "price_vnd": 24990000,
+          "cpu": "Apple M2",
+          "ram_gb": 8,
+          "storage_gb": 256,
+          "display": "13.6 inch"
+        }
+      ]
+    },
+    "llm_latency_ms": 0.01,
+    "tool_latency_ms": 0.03
+  },
+  {
+    "test_case_id": "TC04",
+    "provider": "MockOfflineProvider",
+    "model": "offline-mock-product-agent",
+    "run_started_at_utc": "2026-09-13T03:36:53.561673+00:00",
+    "step": 2,
+    "query": "Tìm hai laptop có giá không quá 25 triệu đồng rồi tạo báo cáo so sánh với tiêu đề 'Laptop trong ngân sách 25 triệu'.",
+    "action_type": "TOOL_EXECUTION",
+    "thought": "Đã có kết quả tìm kiếm; dùng hai product_id đầu tiên để tạo báo cáo.",
+    "tool_name": "create_comparison_report",
+    "arguments": {
+      "product_ids": [
+        "LP002",
+        "LP001"
+      ],
+      "title": "Laptop trong ngân sách 25 triệu"
+    },
+    "observation": {
+      "status": "SUCCESS",
+      "message": "Đã tạo báo cáo 'Laptop trong ngân sách 25 triệu' với mã CMP-775E1C16.",
+      "report": {
+        "report_id": "CMP-775E1C16",
+        "title": "Laptop trong ngân sách 25 triệu",
+        "product_ids": [
+          "LP002",
+          "LP001"
+        ],
+        "products": [
+          {
+            "product_id": "LP002",
+            "name": "ASUS Vivobook 15",
+            "brand": "ASUS",
+            "category": "laptop",
+            "price_vnd": 19490000,
+            "cpu": "AMD Ryzen 7",
+            "ram_gb": 16,
+            "storage_gb": 512,
+            "display": "15.6 inch"
+          },
+          {
+            "product_id": "LP001",
+            "name": "Lenovo ThinkPad E14 Gen 5",
+            "brand": "Lenovo",
+            "category": "laptop",
+            "price_vnd": 22900000,
+            "cpu": "Intel Core i5",
+            "ram_gb": 16,
+            "storage_gb": 512,
+            "display": "14 inch"
+          }
+        ],
+        "summary": {
+          "lowest_price_product_id": "LP002",
+          "lowest_price_vnd": 19490000,
+          "price_range_vnd": 3410000
+        },
+        "data_source": "MOCK_PRODUCT_CATALOG",
+        "data_note": "Báo cáo dùng dữ liệu mô phỏng và không phải khuyến nghị mua hàng."
+      }
+    },
+    "llm_latency_ms": 0.09,
+    "tool_latency_ms": 0.03
+  },
+  {
+    "test_case_id": "TC04",
+    "provider": "MockOfflineProvider",
+    "model": "offline-mock-product-agent",
+    "run_started_at_utc": "2026-09-13T03:36:53.561673+00:00",
+    "step": 3,
+    "query": "Tìm hai laptop có giá không quá 25 triệu đồng rồi tạo báo cáo so sánh với tiêu đề 'Laptop trong ngân sách 25 triệu'.",
+    "action_type": "FINAL_ANSWER",
+    "thought": "Báo cáo đã được tạo thành công; có thể trả lời và kết thúc.",
+    "output": "Đã tạo báo cáo so sánh CMP-775E1C16 từ dữ liệu catalog mô phỏng. Kết quả không phải giá bán thời gian thực hay khuyến nghị mua hàng.",
+    "llm_latency_ms": 0.18
+  },
+  {
+    "test_case_id": "TC05",
+    "provider": "MockOfflineProvider",
+    "model": "offline-mock-product-agent",
+    "run_started_at_utc": "2026-09-13T03:36:53.561673+00:00",
+    "step": 1,
+    "query": "Tạo báo cáo so sánh giữa LP001 và mã sản phẩm không tồn tại LP999.",
+    "action_type": "TOOL_EXECUTION",
+    "thought": "Yêu cầu đã cung cấp đủ hai mã sản phẩm để tạo báo cáo.",
+    "tool_name": "create_comparison_report",
+    "arguments": {
+      "product_ids": [
+        "LP001",
+        "LP999"
+      ],
+      "title": "Báo cáo so sánh sản phẩm"
+    },
+    "observation": {
+      "status": "INVALID_PRODUCT",
+      "invalid_product_ids": [
+        "LP999"
+      ],
+      "message": "Không tồn tại sản phẩm: LP999."
+    },
+    "llm_latency_ms": 0.01,
+    "tool_latency_ms": 0.01
+  },
+  {
+    "test_case_id": "TC05",
+    "provider": "MockOfflineProvider",
+    "model": "offline-mock-product-agent",
+    "run_started_at_utc": "2026-09-13T03:36:53.561673+00:00",
+    "step": 2,
+    "query": "Tạo báo cáo so sánh giữa LP001 và mã sản phẩm không tồn tại LP999.",
+    "action_type": "FINAL_ANSWER",
+    "thought": "Tool đã xác nhận mã sản phẩm không hợp lệ; cần dừng và báo đúng lỗi.",
+    "output": "Không thể tạo báo cáo vì LP999 không tồn tại trong catalog mô phỏng. Tôi không tự tạo dữ liệu thay thế.",
+    "llm_latency_ms": 0.03
   }
 ]
