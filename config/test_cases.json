@@ -1,0 +1,37 @@
+[
+  {
+    "id": "TC01",
+    "type": "direct_query",
+    "question": "Bạn có thể giúp tôi những gì khi cần tìm và so sánh sản phẩm?",
+    "expected_behavior": "Chatbot trả lời trực tiếp về phạm vi hỗ trợ, không gọi Tool và không tự đưa ra giá hay thông số sản phẩm.",
+    "complexity": "Low"
+  },
+  {
+    "id": "TC02",
+    "type": "single_tool_query",
+    "question": "Tìm giúp tôi các laptop có giá không quá 25 triệu đồng.",
+    "expected_behavior": "Agent gọi 'search_products' với category là 'laptop' và max_price_vnd là 25000000, sau đó chỉ trình bày các sản phẩm từ Observation.",
+    "complexity": "Medium"
+  },
+  {
+    "id": "TC03",
+    "type": "comparison_report_creation",
+    "question": "Tạo báo cáo so sánh có tiêu đề 'Laptop cho AI researcher' cho hai sản phẩm LP001 và LP002.",
+    "expected_behavior": "Agent gọi 'create_comparison_report' với product_ids gồm LP001 và LP002, đồng thời giữ đúng tiêu đề báo cáo.",
+    "complexity": "Medium"
+  },
+  {
+    "id": "TC04",
+    "type": "multi_step_reasoning",
+    "question": "Tìm hai laptop có giá không quá 25 triệu đồng rồi tạo báo cáo so sánh với tiêu đề 'Laptop trong ngân sách 25 triệu'.",
+    "expected_behavior": "Agent gọi 'search_products' trước, lấy ít nhất hai product_id hợp lệ từ Observation, sau đó gọi 'create_comparison_report' bằng các mã đó và trả kết quả cuối cùng.",
+    "complexity": "High"
+  },
+  {
+    "id": "TC05",
+    "type": "edge_case_handling",
+    "question": "Tạo báo cáo so sánh giữa LP001 và mã sản phẩm không tồn tại LP999.",
+    "expected_behavior": "Agent nhận kết quả NOT_FOUND hoặc INVALID_PRODUCT từ Tool, thông báo rõ mã LP999 không tồn tại và không tự tạo dữ liệu sản phẩm.",
+    "complexity": "Medium"
+  }
+]
