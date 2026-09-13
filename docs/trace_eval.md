@@ -1,8 +1,10 @@
 # 📊 BÁO CÁO THU HOẠCH NGHIỆM THU BÀI LAB 3 (BƯỚC 3 — SUBMISSION ARTIFACT)
 
-> **Họ và Tên Học viên:** [Điền Họ và Tên]  
-> **Mã Sinh Viên / Mã Học viên:** [Điền MSSV]  
-> **Chủ đề Lựa chọn:** [Điền tên chủ đề đã chọn từ docs/DANH_SACH_DE_TAI.md hoặc Đề tài Mở]  
+> **Họ và Tên Học viên:** Nguyễn Tuấn Thành
+> **Mã Sinh Viên / Mã Học viên:** 2A202602640
+> **Chủ đề Lựa chọn:** Product Comparison Assistant — Trợ lý tìm kiếm và tạo báo cáo so sánh sản phẩm
+
+**Phạm vi MVP:** Hệ thống làm việc với danh mục điện thoại và laptop mô phỏng. Chatbot có thể trả lời câu hỏi chung; ReAct Agent sử dụng `search_products` để tra cứu theo tên, loại hoặc ngân sách và `create_comparison_report` để tạo báo cáo từ ít nhất hai mã sản phẩm. MVP không truy cập giá bán thời gian thực, không đặt hàng, không thanh toán và không tự đưa ra kết luận mua hàng ngoài dữ liệu do tool cung cấp.
 
 ---
 
@@ -10,11 +12,11 @@
 
 | Tiêu chí Đánh giá | Mức độ (1 - 5) | Giải trình chi tiết lý do chọn điểm |
 | :--- | :---: | :--- |
-| **1. Multi-step Reasoning** | / 5 | Bài toán có yêu cầu chia nhỏ nhiều bước suy luận nối tiếp nhau không? |
-| **2. Tool Interaction** | / 5 | Hệ thống có cần kết nối với MCP Server / Cơ sở dữ liệu bên ngoài không? |
-| **3. Dynamic Decision** | / 5 | Bước tiếp theo có phụ thuộc vào kết quả quan sát bước trước không? |
-| **4. Long Horizon Goal** | / 5 | Hệ thống có phải giữ mục tiêu xuyên suốt qua nhiều lượt xử lý không? |
-| **TỔNG ĐIỂM AGENTIC FIT** | **/ 20** | *Nếu tổng điểm > 12/20: Bài toán rất phù hợp triển khai Agentic System.* |
+| **1. Multi-step Reasoning** | 4 / 5 | Yêu cầu đơn giản chỉ cần một lần tra cứu, nhưng yêu cầu tạo báo cáo theo điều kiện cần tìm sản phẩm, đọc kết quả, chọn mã phù hợp rồi mới tạo báo cáo. |
+| **2. Tool Interaction** | 5 / 5 | Agent bắt buộc gọi MCP Server để lấy dữ liệu từ danh mục sản phẩm và tạo artifact báo cáo; LLM không được tự bịa giá hoặc thông số. |
+| **3. Dynamic Decision** | 4 / 5 | Việc gọi tool thứ hai và các mã sản phẩm truyền vào phụ thuộc trực tiếp vào Observation do `search_products` trả về. |
+| **4. Long Horizon Goal** | 3 / 5 | Agent phải giữ mục tiêu và các ràng buộc ngân sách qua nhiều bước trong một yêu cầu, nhưng MVP chưa cần memory dài hạn hoặc tự lập kế hoạch qua nhiều phiên. |
+| **TỔNG ĐIỂM AGENTIC FIT** | **16 / 20** | Bài toán vượt ngưỡng 12/20 và phù hợp để minh họa ReAct đa bước, nhưng chưa cần Autonomous Agent. |
 
 ---
 
