@@ -22,37 +22,18 @@
 
 ## 2. TRÍCH XUẤT KẾT QUẢ WATERFALL TRACE LOG (SAU KHI CHẠY TEST SUITE TRÊN API THẬT)
 
-> ⚠️ **YÊU CẦU NGHIỆM THU:** Mở tệp `.env` điền `GEMINI_API_KEY` (hoặc `OPENAI_API_KEY`) để kết nối LLM thật trước khi thực thi `python src/app.py --all`. Bài nộp chỉ dùng Mock Offline Provider sẽ không đạt điểm nghiệm thực tế.
+> ⚠️ **YÊU CẦU NGHIỆM THU:** Mở tệp `.env`, đặt `LLM_PROVIDER=openai` và điền `OPENAI_API_KEY` để kết nối LLM thật trước khi thực thi `python src/app.py --all`. Bài nộp chỉ dùng Mock Offline Provider sẽ không đạt điểm nghiệm thực tế.
 
 Dán 1 đoạn trích xuất log tiêu biểu từ file `docs/trace_waterfall.json` sinh ra từ phản hồi LLM API thật:
 
-```json
-[
-  {
-    "step": 1,
-    "action_type": "TOOL_EXECUTION",
-    "tool_name": "academic_query",
-    "arguments": {
-      "student_id": "SV2026001"
-    },
-    "observation": {
-      "status": "SUCCESS",
-      "student_id": "SV2026001",
-      "data": {
-        "full_name": "Nguyễn Văn An",
-        "gpa": 3.85
-      }
-    },
-    "latency_ms": 120.5
-  }
-]
-```
+> Chưa điền: đoạn trace tại đây phải được lấy từ lần chạy OpenAI API thật, không dùng dữ liệu mẫu hoặc Mock để thay thế.
 
 ---
 
 ## 3. TỔNG KẾT KẾT QUẢ NGHIỆM THU & NỘP BÀI
 
-- [ ] Đã điền API Key thật trong `.env` và xác nhận Agent chạy mượt mà trên LLM API thật (Gemini/OpenAI).
+- **Preflight offline:** 5 / 5 test cases PASS bằng `MockOfflineProvider`; 5 lượt gọi tool đúng theo acceptance criteria. Kết quả này chỉ xác nhận logic nội bộ, không thay thế lần nghiệm thu bằng API thật.
+- [ ] Đã điền API Key thật trong `.env` và xác nhận Agent chạy mượt mà trên OpenAI API thật.
 - **Tổng số Test Cases đã chạy thành công:** ___ / 5 test cases.
 - **Số lượt gọi Tool qua MCP Server chính xác:** ___ lượt.
 - **Kết quả đẩy Repo nộp bài:** [ ] Đã Commit và Push mã nguồn thành công lên GitHub cá nhân.
