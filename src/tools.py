@@ -4,6 +4,7 @@ Mã nguồn chứa danh sách Tool Schemas (JSON Schema) và Execution Layer ph�
 """
 
 import json
+import hashlib
 from typing import Dict, Any
 
 # ==============================================================================
@@ -67,65 +68,246 @@ TOOLS_SCHEMA = [
 # 2. MÔ PHỎNG DỮ LIỆU & HÀM THỰC THI TOOL (EXECUTION LAYER)
 # ==============================================================================
 
-MOCK_DATABASE = {
-    "SV2026001": {
-        "full_name": "Nguyễn Văn An",
-        "class": "AI-K4",
-        "gpa": 3.85,
-        "email": "an.nv@vinuni.edu.vn",
-        "status": "Đang học",
-        "advisor": "PGS.TS Nguyễn Văn A"
+MOCK_PRODUCT_CATALOG = {
+    "LP001": {
+        "product_id": "LP001",
+        "name": "Lenovo ThinkPad E14 Gen 5",
+        "brand": "Lenovo",
+        "category": "laptop",
+        "price_vnd": 22900000,
+        "cpu": "Intel Core i5",
+        "ram_gb": 16,
+        "storage_gb": 512,
+        "display": "14 inch"
     },
-    "SV2026002": {
-        "full_name": "Trần Thị Bình",
-        "class": "AI-K4",
-        "gpa": 3.60,
-        "email": "binh.tt@vinuni.edu.vn",
-        "status": "Đang học",
-        "advisor": "TS. Lê Thị B"
+    "LP002": {
+        "product_id": "LP002",
+        "name": "ASUS Vivobook 15",
+        "brand": "ASUS",
+        "category": "laptop",
+        "price_vnd": 19490000,
+        "cpu": "AMD Ryzen 7",
+        "ram_gb": 16,
+        "storage_gb": 512,
+        "display": "15.6 inch"
+    },
+    "LP003": {
+        "product_id": "LP003",
+        "name": "MacBook Air M2",
+        "brand": "Apple",
+        "category": "laptop",
+        "price_vnd": 24990000,
+        "cpu": "Apple M2",
+        "ram_gb": 8,
+        "storage_gb": 256,
+        "display": "13.6 inch"
+    },
+    "LP004": {
+        "product_id": "LP004",
+        "name": "Dell XPS 13",
+        "brand": "Dell",
+        "category": "laptop",
+        "price_vnd": 31990000,
+        "cpu": "Intel Core Ultra 7",
+        "ram_gb": 16,
+        "storage_gb": 512,
+        "display": "13.4 inch"
+    },
+    "PH001": {
+        "product_id": "PH001",
+        "name": "Samsung Galaxy S24",
+        "brand": "Samsung",
+        "category": "phone",
+        "price_vnd": 18990000,
+        "ram_gb": 8,
+        "storage_gb": 256,
+        "display": "6.2 inch"
+    },
+    "PH002": {
+        "product_id": "PH002",
+        "name": "iPhone 15",
+        "brand": "Apple",
+        "category": "phone",
+        "price_vnd": 19990000,
+        "ram_gb": 6,
+        "storage_gb": 128,
+        "display": "6.1 inch"
+    },
+    "PH003": {
+        "product_id": "PH003",
+        "name": "Xiaomi 14T",
+        "brand": "Xiaomi",
+        "category": "phone",
+        "price_vnd": 12990000,
+        "ram_gb": 12,
+        "storage_gb": 256,
+        "display": "6.67 inch"
     }
 }
 
+COMPARISON_REPORTS: Dict[str, Dict[str, Any]] = {}
 
-def execute_academic_query(student_id: str) -> str:
-    """Thực thi tra cứu học vụ theo mã sinh viên"""
-    student = MOCK_DATABASE.get(student_id.strip().upper())
-    if student:
-        return json.dumps({
-            "status": "SUCCESS",
-            "student_id": student_id,
-            "data": student
-        }, ensure_ascii=False)
-    else:
-        return json.dumps({
+
+def _json_response(payload: Dict[str, Any]) -> str:
+    return json.dumps(payload, ensure_ascii=False)
+
+
+def execute_search_products(
+    query: str,
+    category: str | None = None,
+    max_price_vnd: int | None = None
+) -> str:
+    """Tìm sản phẩm trong catalog mô phỏng bằng các bộ lọc có cấu trúc."""
+    if not isinstance(query, str):
+        return _json_response({
+            "status": "INVALID_ARGUMENTS",
+            "message": "query phải là chuỗi."
+        })
+    if category is not None and category not in {"phone", "laptop"}:
+        return _json_response({
+            "status": "INVALID_ARGUMENTS",
+            "message": "category phải là 'phone' hoặc 'laptop'."
+        })
+    if max_price_vnd is not None and (
+        isinstance(max_price_vnd, bool)
+        or not isinstance(max_price_vnd, int)
+        or max_price_vnd < 0
+    ):
+        return _json_response({
+            "status": "INVALID_ARGUMENTS",
+            "message": "max_price_vnd phải là số nguyên không âm."
+        })
+
+    normalized_query = query.strip().casefold()
+    matches = []
+    for product in MOCK_PRODUCT_CATALOG.values():
+        searchable_text = " ".join(
+            str(value) for value in product.values()
+        ).casefold()
+        if normalized_query and normalized_query not in searchable_text:
+            continue
+        if category and product["category"] != category:
+            continue
+        if max_price_vnd is not None and product["price_vnd"] > max_price_vnd:
+            continue
+        matches.append(dict(product))
+
+    matches.sort(key=lambda item: (item["price_vnd"], item["product_id"]))
+    filters = {
+        "query": query,
+        "category": category,
+        "max_price_vnd": max_price_vnd
+    }
+    if not matches:
+        return _json_response({
             "status": "NOT_FOUND",
-            "message": f"Không tìm thấy dữ liệu sinh viên có mã '{student_id}'"
-        }, ensure_ascii=False)
-
-
-def execute_schedule_appointment(student_id: str, datetime_str: str, advisor_name: str = "PGS.TS Nguyễn Văn A") -> str:
-    """Thực thi đặt lịch hẹn tư vấn học vụ"""
-    return json.dumps({
+            "filters": filters,
+            "message": "Không tìm thấy sản phẩm phù hợp trong catalog mô phỏng."
+        })
+    return _json_response({
         "status": "SUCCESS",
-        "booking_id": f"BK-{student_id}-99",
-        "student_id": student_id,
-        "datetime": datetime_str,
-        "advisor": advisor_name,
-        "message": f"Đặt lịch thành công cho sinh viên {student_id} với {advisor_name} vào lúc {datetime_str}."
-    }, ensure_ascii=False)
+        "data_source": "MOCK_PRODUCT_CATALOG",
+        "data_note": "Giá và thông số chỉ phục vụ bài lab, không phải dữ liệu bán hàng thời gian thực.",
+        "filters": filters,
+        "count": len(matches),
+        "products": matches
+    })
 
 
-# Router gọi tool thực tế
+def execute_create_comparison_report(product_ids: list[str], title: str) -> str:
+    """Tạo và lưu một báo cáo so sánh từ các mã sản phẩm hợp lệ."""
+    if not isinstance(product_ids, list) or not 2 <= len(product_ids) <= 4:
+        return _json_response({
+            "status": "INVALID_ARGUMENTS",
+            "message": "product_ids phải chứa từ 2 đến 4 mã sản phẩm."
+        })
+    if not all(isinstance(product_id, str) for product_id in product_ids):
+        return _json_response({
+            "status": "INVALID_ARGUMENTS",
+            "message": "Mỗi product_id phải là chuỗi."
+        })
+    if not isinstance(title, str) or not title.strip():
+        return _json_response({
+            "status": "INVALID_ARGUMENTS",
+            "message": "title không được để trống."
+        })
+
+    normalized_ids = [product_id.strip().upper() for product_id in product_ids]
+    if len(set(normalized_ids)) != len(normalized_ids):
+        return _json_response({
+            "status": "INVALID_ARGUMENTS",
+            "message": "Danh sách không được chứa mã sản phẩm trùng nhau."
+        })
+
+    invalid_ids = [
+        product_id
+        for product_id in normalized_ids
+        if product_id not in MOCK_PRODUCT_CATALOG
+    ]
+    if invalid_ids:
+        return _json_response({
+            "status": "INVALID_PRODUCT",
+            "invalid_product_ids": invalid_ids,
+            "message": f"Không tồn tại sản phẩm: {', '.join(invalid_ids)}."
+        })
+
+    products = [dict(MOCK_PRODUCT_CATALOG[product_id]) for product_id in normalized_ids]
+    prices = [product["price_vnd"] for product in products]
+    cheapest = min(products, key=lambda item: item["price_vnd"])
+    report_seed = json.dumps(
+        {"title": title.strip(), "product_ids": normalized_ids},
+        ensure_ascii=True,
+        sort_keys=True
+    )
+    report_id = f"CMP-{hashlib.sha256(report_seed.encode('utf-8')).hexdigest()[:8].upper()}"
+    report = {
+        "report_id": report_id,
+        "title": title.strip(),
+        "product_ids": normalized_ids,
+        "products": products,
+        "summary": {
+            "lowest_price_product_id": cheapest["product_id"],
+            "lowest_price_vnd": cheapest["price_vnd"],
+            "price_range_vnd": max(prices) - min(prices)
+        },
+        "data_source": "MOCK_PRODUCT_CATALOG",
+        "data_note": "Báo cáo dùng dữ liệu mô phỏng và không phải khuyến nghị mua hàng."
+    }
+    COMPARISON_REPORTS[report_id] = report
+    return _json_response({
+        "status": "SUCCESS",
+        "message": f"Đã tạo báo cáo '{report['title']}' với mã {report_id}.",
+        "report": report
+    })
+
+
 TOOL_ROUTER = {
-    "academic_query": execute_academic_query,
-    "schedule_appointment": execute_schedule_appointment
+    "search_products": execute_search_products,
+    "create_comparison_report": execute_create_comparison_report
 }
 
+
 def dispatch_tool_call(tool_name: str, arguments: Dict[str, Any]) -> str:
-    """Hàm trung chuyển thực thi tool"""
-    if tool_name in TOOL_ROUTER:
-        try:
-            return TOOL_ROUTER[tool_name](**arguments)
-        except Exception as e:
-            return json.dumps({"status": "EXECUTION_ERROR", "error": str(e)}, ensure_ascii=False)
-    return json.dumps({"status": "UNKNOWN_TOOL", "error": f"Tool '{tool_name}' không tồn tại!"}, ensure_ascii=False)
+    """Kiểm tra request và chuyển tool call tới execution function tương ứng."""
+    if tool_name not in TOOL_ROUTER:
+        return _json_response({
+            "status": "UNKNOWN_TOOL",
+            "message": f"Tool '{tool_name}' không tồn tại."
+        })
+    if not isinstance(arguments, dict):
+        return _json_response({
+            "status": "INVALID_ARGUMENTS",
+            "message": "arguments phải là một JSON object."
+        })
+    try:
+        return TOOL_ROUTER[tool_name](**arguments)
+    except TypeError as exc:
+        return _json_response({
+            "status": "INVALID_ARGUMENTS",
+            "message": str(exc)
+        })
+    except Exception as exc:
+        return _json_response({
+            "status": "EXECUTION_ERROR",
+            "message": str(exc)
+        })
