@@ -80,7 +80,7 @@ Trace cho thấy tham số `product_ids` của bước 2 được lấy động 
 - **Số lượt gọi Tool qua MCP Server chính xác:** 5 lượt, gồm 4 Observation `SUCCESS` và 1 `INVALID_PRODUCT` mong đợi ở `TC05`.
 - **Waterfall trace:** 10 events; tổng LLM latency `18,859.20 ms`, tổng Tool latency `0.46 ms`.
 - **Kiểm thử tự động:** 11 / 11 unit và API contract tests PASS trên Python 3.11.11.
-- **Kết quả đẩy Repo nộp bài:** [ ] Đã Commit và Push mã nguồn thành công lên GitHub cá nhân.
+- **Kết quả đẩy Repo nộp bài:** [x] Đã Commit và Push mã nguồn thành công lên GitHub cá nhân tại `https://github.com/Chika1357/K4A-Day03-NguyenTuanThanh-2A202602640`.
 
 ---
 
