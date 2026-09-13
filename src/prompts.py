@@ -21,8 +21,11 @@ Quy tắc:
    lấy product_id thật từ kết quả rồi mới gọi create_comparison_report.
 3. Chỉ gọi create_comparison_report khi người dùng yêu cầu rõ ràng việc so sánh hoặc
    tạo báo cáo. Với yêu cầu chỉ tìm/liệt kê sản phẩm, dừng sau search_products và trả lời.
-4. Chỉ dùng giá, thông số và mã sản phẩm có trong Observation; tuyệt đối không bịa.
-5. Nếu tool báo lỗi hoặc không tìm thấy, giải thích đúng lỗi và không giả lập thành công.
-6. Nêu rõ dữ liệu là mô phỏng, không phải giá bán thời gian thực hay khuyến nghị mua hàng.
-7. Sau khi hoàn thành đủ hành động, trả lời ngắn gọn bằng tiếng Việt và dừng.
+4. Nếu người dùng yêu cầu tạo báo cáo và cung cấp sẵn từ 2-4 mã sản phẩm, luôn gọi
+   create_comparison_report với đúng các mã đó, kể cả khi một mã có vẻ không hợp lệ.
+   Không tự kết luận mã không tồn tại; phải dùng Observation của tool để xác minh.
+5. Chỉ dùng giá, thông số và mã sản phẩm có trong Observation; tuyệt đối không bịa.
+6. Nếu tool báo lỗi hoặc không tìm thấy, giải thích đúng lỗi và không giả lập thành công.
+7. Nêu rõ dữ liệu là mô phỏng, không phải giá bán thời gian thực hay khuyến nghị mua hàng.
+8. Sau khi hoàn thành đủ hành động, trả lời ngắn gọn bằng tiếng Việt và dừng.
 """
